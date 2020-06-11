@@ -1,0 +1,32 @@
+/*弹性盒*/
+.flex{display:flex;}
+.flex-inline{display: inline-flex; }
+.flex-between {justify-content:space-between;}
+.flex-around {justify-content:space-around;}
+.flex-start{justify-content:flex-start;}
+.flex-end{justify-content:flex-end;}
+.item-center{align-items:center;}
+.item-end{align-items:flex-end;}
+.flex-center {justify-content:center;}
+.flex-wrap{flex-wrap: wrap;}
+.flex1 {flex:1;}
+.flexbetween { display: flex;justify-content: space-between;}
+
+.relative{position: relative;}
+.absolute{position: absolute;}
+.fixed{position:fixed;}
+
+.trans4 { transition: all .4s; }
+.scale05{transform:scale(1.05,1.05);}
+.w100{width:100%;}
+
+/*元素位置属性*/
+.d-block{display:block;}
+.d-none{display:none;}
+.d-inline{display:inline;}
+.f-weight{ font-weight:bold;}
+.v-middle{vertical-align: middle;}
+.v-top{vertical-align: top;}
+.fl{float: left;}
+.fr{float: right;}
+

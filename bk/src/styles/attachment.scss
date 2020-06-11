@@ -1,0 +1,20 @@
+.lists{
+    width:100%;
+    height:auto;
+    margin:15px auto;
+    clear: both;
+    display: flex;
+    align-items: baseline;
+  }
+  .lists > h4{
+    font-size: 12px;
+    margin-right: 20px;
+  }
+  .select {
+    display: flex;
+    align-items: baseline;
+  }
+ .lists .el-select,
+ .lists .upload-demo {
+    margin-right: 20px;
+  }
