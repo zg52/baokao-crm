@@ -13,12 +13,14 @@
   border-bottom: 1px #f3f3f3 solid;
   margin-bottom: 0;
 }
-/deep/.el-input__inner {
+.msgbox {
+  /deep/.el-input__inner {
   border: none;
   font-size: 16px;
   color: #364064;
   height: 58px;
   line-height: 58px;
+}
 }
 .demo-ruleForm > div:last-child {
   border: none;
@@ -55,7 +57,7 @@
         margin-left: 30px;
         span {
           padding-left: 12px;
-          font-size: 22px;
+          font-size: 20px;
           font-weight: 400;
           color: rgba(54, 64, 100, 1);
         }
@@ -168,12 +170,16 @@ color:rgba(153,153,153,1);
   top:2px;
 }
 .filterList {
+  display: flex;
+  justify-content: space-around;
+  width: 1496px;
   margin-top: 40px;
+  flex-wrap: wrap;
   & > div {
     box-shadow:0px 8px 31px 0px rgba(20,49,127,0.08), 3px 3px 12px 0px rgba(228,228,228,0.5);
 border-radius:9px;
     margin-bottom: 40px;
-    float: left;
+
     width: 730px;
     div:first-child {
       height: 58px;
@@ -197,7 +203,7 @@ border-radius:9px;
         margin-left: 30px;
         span {
           padding-left: 12px;
-          font-size: 22px;
+          font-size: 20px;
           font-weight: 400;
           color: rgba(54, 64, 100, 1);
         }
@@ -208,16 +214,19 @@ border-radius:9px;
       }
     }
     div:nth-child(2) {
-      font-size: 18px;
+      font-size: 16px;
       color: #333;
       padding:20px;
     }
 
     }
-    & > div:nth-child(odd) {
-      clear: both;
-      margin-right: 32px;
+
+  }
+  /deep/.paiwei {
+    .el-dialog__title {
+      font-size: 20px;
     }
+    .el-form-item {border:none;.el-form-item__label{line-height: 40px;}}
   }
 </style>
 
@@ -228,7 +237,7 @@ border-radius:9px;
         <div class="flexbetween item-center">
           <div>
             <i>
-              <img src="../../assets/image/msgbox1.png" alt />
+              <img src="../../assets/image/msgbox1.png"/>
             </i>
             <span>学生基本信息</span>
           </div>
@@ -256,16 +265,16 @@ border-radius:9px;
             </el-select>
           </el-form-item>
           <el-form-item label="文化分：" prop="whf">
-            <el-input v-model="ruleForm.whf" placeholder="请输入文化分"></el-input>
+            <el-input v-model.number="ruleForm.whf" placeholder="请输入文化分"></el-input>
           </el-form-item>
           <el-form-item label="专业分：" prop="zyf">
-            <el-input v-model="ruleForm.zyf" placeholder="请输入专业分"></el-input>
+            <el-input v-model.number="ruleForm.zyf" placeholder="请输入专业分"></el-input>
           </el-form-item>
           <el-form-item label="英语分：" prop="yy">
-            <el-input v-model="ruleForm.yy" placeholder="请输入英语分"></el-input>
+            <el-input v-model.number="ruleForm.yy" placeholder="请输入英语分"></el-input>
           </el-form-item>
           <el-form-item label="语文分：" prop="yw">
-            <el-input v-model="ruleForm.yw" placeholder="请输入语文分"></el-input>
+            <el-input v-model.number="ruleForm.yw" placeholder="请输入语文分"></el-input>
           </el-form-item>
         </el-form>
         <div class="addTables" id="addTables">
@@ -285,7 +294,7 @@ border-radius:9px;
         <div class="flexbetween item-center">
           <div>
             <i>
-              <img src="../../assets/image/msgbox1.png" alt />
+              <img src="../../assets/image/msgbox1.png"/>
             </i>
             <span>选择筛选条件</span>
           </div>
@@ -317,12 +326,12 @@ border-radius:9px;
          <div class="down1" id="down2" @click="down2"><img src="../../assets/image/down2.png" alt=""></div>
       </div>
     </div>
-    <div class="filterList">
-        <div v-if="termNode.lk_term0">
+    <div class="filterList" ref="filterList">
+        <div v-show="termNode.lk_term0" ref="lk_term0">
           <div class="flexbetween item-center">
               <div>
             <i>
-              <img src="../../assets/image/msgbox1.png" alt />
+              <img src="../../assets/image/msgbox1.png"/>
             </i>
             <span>211和985院校</span>
           </div>
@@ -337,11 +346,11 @@ border-radius:9px;
         </div>
        </div>
        <!-- 2 -->
-        <div v-if="termNode.lk_term1">
+        <div v-show="termNode.lk_term1" ref="lk_term1">
           <div class="flexbetween item-center">
               <div>
             <i>
-              <img src="../../assets/image/msgbox1.png" alt />
+              <img src="../../assets/image/msgbox1.png"/>
             </i>
             <span>入选双一流院校</span>
           </div>
@@ -356,11 +365,11 @@ border-radius:9px;
         </div>
        </div>
        <!-- 3 -->
-     <div v-if="termNode.lk_term2">
+     <div v-show="termNode.lk_term2" ref="lk_term2">
           <div class="flexbetween item-center">
               <div>
             <i>
-              <img src="../../assets/image/msgbox1.png" alt />
+              <img src="../../assets/image/msgbox1.png"/>
             </i>
             <span>艺术类院校</span>
           </div>
@@ -375,11 +384,11 @@ border-radius:9px;
         </div>
        </div>
        <!-- 4 -->
-     <div v-if="termNode.lk_term3">
+     <div v-show="termNode.lk_term3" ref="lk_term3">
           <div class="flexbetween item-center">
               <div>
             <i>
-              <img src="../../assets/image/msgbox1.png" alt />
+              <img src="../../assets/image/msgbox1.png"/>
             </i>
             <span>专业分比重高</span>
           </div>
@@ -393,11 +402,11 @@ border-radius:9px;
           暂无数据
         </div>
        </div>
-        <div v-if="termNode.lk_term4">
+        <div v-show="termNode.lk_term4" ref="lk_term4">
           <div class="flexbetween item-center">
               <div>
             <i>
-              <img src="../../assets/image/msgbox1.png" alt />
+              <img src="../../assets/image/msgbox1.png"/>
             </i>
             <span>文化分比重高</span>
           </div>
@@ -411,11 +420,11 @@ border-radius:9px;
           暂无数据
         </div>
        </div>
-        <div v-if="termNode.lk_term5">
+        <div v-show="termNode.lk_term5" ref="lk_term5">
           <div class="flexbetween item-center">
               <div>
             <i>
-              <img src="../../assets/image/msgbox1.png" alt />
+              <img src="../../assets/image/msgbox1.png"/>
             </i>
             <span>文化排名录取</span>
           </div>
@@ -430,6 +439,31 @@ border-radius:9px;
         </div>
        </div>
   </div>
+
+  <!-- 排位弹窗 -->
+  <el-dialog
+  class="paiwei"
+  title="请输入本省排位"
+  :visible.sync="paiweiShow"
+  width="30%"
+  center>
+    <el-form :model="paiwei" ref="paiwei" :inline="true">
+        <el-form-item
+     label="本省排位/名次："
+     prop="pw"
+     :rules="[
+      { required: true, message: '排位/名次不能为空'},
+      { type: 'number', message: '排位/名次必须为数字值'}
+    ]"
+      >
+    <el-input type="age" v-model.number="paiwei.pw" autocomplete="off"></el-input>
+  </el-form-item>
+    </el-form>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="paiweiShow = false">取 消</el-button>
+    <el-button type="primary" @click="paiweiDown">确 定</el-button>
+  </span>
+</el-dialog>
   </div>
 </template>
 
@@ -469,18 +503,23 @@ export default {
         ],
         syd: [
           { required: true, message: "请选择生源地" }
+
         ],
         whf: [
-          { required: true, message: "请输入分值" }
+          { required: true, message: "请输入分值" },
+          { type: 'number', message: '分值必须为数字值'}
         ],
         zyf: [
-          { required: true, message: "请输入分值" }
+          { required: true, message: "请输入分值" },
+          { type: 'number', message: '分值必须为数字值'}
         ],
         yy: [
-          { required: true, message: "请输入分值" }
+          { required: true, message: "请输入分值" },
+          { type: 'number', message: '分值必须为数字值'}
         ],
         yw: [
-          { required: true, message: "请输入分值" }
+          { required: true, message: "请输入分值" },
+          { type: 'number', message: '分值必须为数字值'}
         ]
       },
       fileName: '',       //导入的文件名字
@@ -526,12 +565,16 @@ export default {
              ],
           downSwitch: false, //判断下载类型
           termNode: { //控制根据条件筛选返回html的容器隐藏
-            lk_term0: false,
-            lk_term1: false,
-            lk_term2: false,
-            lk_term3: false,
-            lk_term4: false,
-            lk_term5: false
+            lk_term0: true,
+            lk_term1: true,
+            lk_term2: true,
+            lk_term3: true,
+            lk_term4: true,
+            lk_term5: true
+          },
+          paiweiShow: false,  //排位弹出层
+          paiwei: {
+            pw: ''
           }
     }
   },
@@ -627,6 +670,9 @@ export default {
     empty1 (ruleForm) {
        this.$refs[ruleForm].resetFields()
        this.$refs.checkeds.resetFields()
+        for(let i = 0; i <= 5; i++) {
+         this.termNode['lk_term' + i] = false
+       }
        this.fileName = ''
        this.$refs.addXlsx.value = ''
         msgTip('表单信息已清空！','success',true)
@@ -634,6 +680,10 @@ export default {
       // 清空多选条件
     empty2 (checkeds) {
        this.$refs[checkeds].resetFields()
+      //  console.log(this.termNode)
+       for(let i = 0; i <= 5; i++) {
+         this.termNode['lk_term' + i] = false
+       }
         msgTip('条件已清空！','success',true)
     },
 //  多选条件时，验证表单信息
@@ -649,11 +699,13 @@ export default {
               this.ruleForm.prov_id = x.id : String
               });
 
-
             switch(index) {
               case index : e.target.checked ?
-             _this.termNode['lk_term' + index] = true :
-             _this.termNode['lk_term' + index] = false
+             (
+               _this.termNode['lk_term' + index] = true,
+               _this.$refs.filterList.insertBefore(_this.$refs['lk_term' + index],_this.$refs.filterList.childNodes[2])
+               ) :
+             _this.termNode['lk_term' + index] = false;
              break
             }
 
@@ -664,8 +716,8 @@ export default {
           } else {
                 e.target.checked = false
                 msgTip('请先完善学生基本信息！','warning',true)
-            this.$E.stopEvent(e) //阻止冒泡
-           return
+                this.$E.stopEvent(e) //阻止冒泡
+                return
           }
         })
        },
@@ -703,13 +755,24 @@ export default {
     this.downSwitch == true ? down2Handler() : ''
     function down2Handler () {
       _this.downSwitch = false
-      //下载
-      console.log('fioe')
-    }
 
+      _this.paiweiShow = true
+      _this.paiweiDown()  //开始下载表格
+    }
+  },
+  paiweiDown () {
+   this.$refs.paiwei.validate(valid => {
+     if (valid) {
+
+          //开始下载表格
+          console.log('okDown2')
+          this.paiweiShow = false
+     }
+   })
   }
   },
   mounted () {
+
     let  _this = this
     this.$nextTick(function () {
       getProvAndPici().then(res => {  //获取查询类型

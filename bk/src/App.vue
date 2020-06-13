@@ -17,7 +17,7 @@ export default {
 #app {
   font-family: "Microsoft YaHei","Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; zoom: .8;
+  -moz-osx-font-smoothing: grayscale;
 }
 * {
   line-height: 1;
@@ -25,4 +25,18 @@ export default {
   margin: 0;
 
 }
+
+@media screen and (min-device-width:1500px) and (max-device-width:1920px){
+ #app {
+     zoom: .83!important;
+  }
+}
+
+@media screen  and (min-device-width:1204px) and (max-device-width:1500px){
+ #app {
+     zoom: .7;
+  }
+}
+
+
 </style>
