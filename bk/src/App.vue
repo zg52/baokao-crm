@@ -7,8 +7,44 @@
   </div>
 </template>
 <script>
+import Cookies from 'js-cookie'
 export default {
-  name: 'App'
+  name: 'App',
+  data () {
+    return {
+
+    }
+  },
+  watch: {
+     '$route': {
+    handler (val) {
+     !Cookies.get('token') || Cookies.get('token') == undefined ?
+      (this.$router.push({
+      path:'/'
+    }),
+     Cookies.remove('token')):
+     String
+     if(Cookies.get('token') && Cookies.get('token') != undefined) {
+       if(val.path == '/') {
+         this.$router.push({
+           path: '/index'
+         })
+          }
+     }
+    },
+    deep: true
+  }
+  },
+  mounted () {
+    let _this = this
+    this.$nextTick(function () {
+        !Cookies.get('token') || Cookies.get('token') == undefined ?
+         this.$router.push({
+           path: '/'
+         }) : String
+
+    })
+  }
 
 }
 </script>

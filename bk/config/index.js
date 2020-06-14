@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       "/api": {
-        target: "https://wechat.yimingyikao.com/yk_api",
+        target: "https://wechat.yimingyikao.com",
         pathRewrite: { "^/api": "" }, //后面可以使重写的新路径，一般不做更改
         changeOrigin: true
       },
@@ -20,7 +20,7 @@ module.exports = {
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
-    port: 9090, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 9092, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,

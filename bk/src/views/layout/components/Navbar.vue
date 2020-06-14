@@ -4,16 +4,42 @@
  <div class="header_cont">
 <div class="loginOut">
   <img src="../../../assets/image/touxiang.png">
-  <span>hello</span> |
-  <span>退出登录</span>
+  <span>{{ username == '' ? username1 : username }}</span> |
+  <span @click="loginOut($event)">退出登录</span>
 </div>
  </div>
 </header>
 </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+import Cookies from 'js-cookie'
 export default {
+name: 'Navbar',
+data () {
+  return {
+    username1: ''
+  }
+},
+computed: {
+    ...mapState({
+       username: username => username.user.username
+     })
+},
+watch: {
 
+},
+methods: {
+  loginOut (e) { //退出登录
+    this.$router.push({
+      path:'/'
+    })
+    Cookies.remove('token')
+  }
+},
+mounted () {
+  this.username1 = Cookies.get('username1')
+}
 }
 </script>
 <style scoped lang="less">

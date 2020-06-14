@@ -43,7 +43,7 @@
   top: 9px;
 }
 .el-form-item {
-  margin-right: 0;
+  margin-right: 0!important;
 }
 .el-input {
   width: 275px;
@@ -92,11 +92,11 @@
 <template>
   <div class="login">
     <div class="loginCont">
-      <p>欢迎登录艺铭报考系统</p>
+      <p>欢迎登录艺鸣报考系统</p>
       <el-form :model="loginData" :rules="loginReg" :inline="true" ref="loginData">
         <div class="el-icon-s-custom">
-          <el-form-item prop="name">
-            <el-input type="text" v-model="loginData.name" placeholder="请输入用户名"></el-input>
+          <el-form-item prop="username">
+            <el-input type="text" v-model="loginData.username" placeholder="请输入用户名"></el-input>
           </el-form-item>
         </div>
         <div class="el-icon-s-cooperation">
@@ -110,20 +110,27 @@
   </div>
 </template>
 <script>
+import { login } from '@/api/classify'
+import { msgTip } from '@/utils/msgTip' //操作提示
+import Cookies from 'js-cookie'
+import { mapState, mapMutations } from 'vuex'
 export default {
   name: 'Login',
   data() {
     return {
       loginData: {
-        name: "",
+        username: "",
         password: ""
       },
       loginReg: {
-        name: [{ required: true, message: "请输入用户名" }],
+        username: [{ required: true, message: "请输入用户名" }],
         password: [{ required: true, message: "请输入密码" }]
       },
       loading: false
     }
+  },
+  computed: {
+
   },
   methods: {
     loginSubmit (e) {
@@ -131,11 +138,29 @@ export default {
     this.$refs.loginData.validate(valid => {
       valid ? loginHandler() : ''
       function loginHandler () {
-        _this.loading = true
-        console.log('ffhoiewafhwh')
+        login(_this.loginData).then(res => {
+          console.log(res)
+           if(res.data.code == 0) {
+              msgTip('用户名或密码错误！','warning',false)
+           } else {
+              _this.loading = true
+              _this.$store.commit('nameChange',_this.loginData.username) //存贮username
+              Cookies.set('username1',_this.loginData.username)
+               Cookies.set('token',res.data.data.token,{expires:1000}) //存贮token
+                  _this.$router.push({
+                  path:'/index'
+             })
+           }
+        })
       }
     })
   }
+  },
+  mounted () {
+    let _this = this
+    this.$nextTick(() => {
+
+    })
   }
 
 }

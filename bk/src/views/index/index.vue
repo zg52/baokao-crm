@@ -89,8 +89,8 @@
     font-size: 42px;
     vertical-align: middle;
     position: absolute;
-    left: 77px;
-    top:13px;
+   left: 62px;
+    top: 12px;
   }
   position: relative;
   input {
@@ -285,7 +285,7 @@ border-radius:9px;
             ref="addXlsx"
             @click="addXlsxHandler($event)"
             @drop="dropXlsxHandler($event)" />
-            <i class="el-icon-circle-plus-outline"></i> 点击添加或拖拽表格(excel/xlsx)到这里
+            <i class="el-icon-circle-plus-outline"></i> 点击添加或拖拽表格(xls/excel/xlsx)到这里
           </div>
           <p>{{ fileName }} <i v-if="fileName != '' ? true : false" class="el-icon-circle-check"></i> </p>
         </div>
@@ -341,7 +341,7 @@ border-radius:9px;
            <i></i>
           </em>
         </div>
-        <div class="ysl">
+        <div class="ysl" v-html="termNode.lkCont_term0">
           暂无数据
         </div>
        </div>
@@ -360,8 +360,7 @@ border-radius:9px;
            <i></i>
           </em>
         </div>
-        <div class="ysl">
-          暂无数据
+        <div class="ysl" v-html="termNode.lkCont_term1">
         </div>
        </div>
        <!-- 3 -->
@@ -379,7 +378,7 @@ border-radius:9px;
            <i></i>
           </em>
         </div>
-        <div class="ysl">
+        <div class="ysl" v-html="termNode.lkCont_term2">
           暂无数据
         </div>
        </div>
@@ -398,7 +397,7 @@ border-radius:9px;
            <i></i>
           </em>
         </div>
-        <div class="ysl">
+        <div class="ysl" v-html="termNode.lkCont_term3">
           暂无数据
         </div>
        </div>
@@ -416,7 +415,7 @@ border-radius:9px;
            <i></i>
           </em>
         </div>
-        <div class="ysl">
+        <div class="ysl" v-html="termNode.lkCont_term4">
           暂无数据
         </div>
        </div>
@@ -434,7 +433,7 @@ border-radius:9px;
            <i></i>
           </em>
         </div>
-        <div class="ysl">
+        <div class="ysl" v-html="termNode.lkCont_term5">
           暂无数据
         </div>
        </div>
@@ -443,7 +442,7 @@ border-radius:9px;
   <!-- 排位弹窗 -->
   <el-dialog
   class="paiwei"
-  title="请输入本省排位"
+  title="请输入本省排位/名次"
   :visible.sync="paiweiShow"
   width="30%"
   center>
@@ -471,6 +470,7 @@ border-radius:9px;
 import { mapState } from 'vuex'
 import { getProvAndPici, getIndexList } from '@/api/classify'  //接口
 import { msgTip } from '@/utils/msgTip' //操作提示
+import { judgeNet } from '@/utils/judgeNet'
 import Cookies from 'js-cookie'
 import '@/directive/index'
 import XLSX from 'xlsx/dist/xlsx.full.min'
@@ -491,7 +491,7 @@ export default {
         yw: '',      //语文
         ks_type: '1', //默认联考
         down: 2,      //默认为2（0-json,1-表格文件，2-html文本）
-        token: Cookies.get('token',12,{expires:89})
+        token: Cookies.get('token')
 
 
       },
@@ -563,15 +563,32 @@ export default {
                   value:'lk_whfpm'
                }
              ],
-          downSwitch: false, //判断下载类型
+             targetTerm: [ //条件参数
+                { lk_29: 1 },
+                { lk_syl: 1 },
+                { lk_ys: 1 },
+                { lk_zyfg: 1 },
+                { lk_whfg: 1 },
+                { lk_whfpm: 1}
+             ],
+           downSwitch: false, //判断下载类型
           termNode: { //控制根据条件筛选返回html的容器隐藏
-            lk_term0: true,
-            lk_term1: true,
-            lk_term2: true,
-            lk_term3: true,
-            lk_term4: true,
-            lk_term5: true
+            lk_term0: false,
+            lk_term1: false,
+            lk_term2: false,
+            lk_term3: false,
+            lk_term4: false,
+            lk_term5: false,
+            // 筛选返回的html
+            lkCont_term0: '',
+            lkCont_term1: '',
+            lkCont_term2: '',
+            lkCont_term3: '',
+            lkCont_term4: '',
+            lkCont_term5: ''
           },
+
+
           paiweiShow: false,  //排位弹出层
           paiwei: {
             pw: ''
@@ -593,9 +610,9 @@ export default {
 
   },
   computed: {
-    ...mapState({
-      token: token => token.token.token
-    })
+   ...mapState({
+       username:username => username.user.username
+     })
 
   },
   methods: {
@@ -703,16 +720,42 @@ export default {
               case index : e.target.checked ?
              (
                _this.termNode['lk_term' + index] = true,
-               _this.$refs.filterList.insertBefore(_this.$refs['lk_term' + index],_this.$refs.filterList.childNodes[2])
+               _this.$refs.filterList.insertBefore(_this.$refs['lk_term' + index],_this.$refs.filterList.childNodes[2]),
+               getTermHtml(index)
                ) :
              _this.termNode['lk_term' + index] = false;
              break
             }
+              function getTermHtml (idnex) {
+
+                 for (let i = 0; i < _this.targetTerm.length; i++) {
+                   let keys = Object.keys(_this.targetTerm[i])[0]
+                   _this.ruleForm.hasOwnProperty(keys) ?
+                  (new function () {
+                    for (let k in _this.ruleForm) {
+                      if (k == keys) {
+                        delete _this.ruleForm[k]
+                        console.log(_this.ruleForm)
+                      }
+                    }
+                  }
+                  // assignHandler()
+                  )
+                    : assignHandler()
+                    // break
+                 }
+                //  assignHandler()
+                function assignHandler () {
+                    getIndexList(Object.assign(_this.ruleForm,_this.targetTerm[index])).then(res => {  //得到筛选的数据
+                  res.data.data === '' ?
+                  _this.termNode['lkCont_term' + index] = '暂无数据...' :
+                  _this.termNode['lkCont_term' + index] = res
+                  // _this.termNode['lkCont_term' + index] = index
+                  })
+                }
+              }
 
 
-            getIndexList(this.ruleForm).then(res => {  //得到筛选的数据
-              // console.log(res)
-            })
           } else {
                 e.target.checked = false
                 msgTip('请先完善学生基本信息！','warning',true)
@@ -745,6 +788,12 @@ export default {
     function down2Handler () {
       _this.downSwitch = false
       //下载
+      _this.ruleForm.down = 1
+      getIndexList(_this.ruleForm).then(res => {  //得到筛选的数据
+              if(res.data.data == '') {
+                msgTip('暂无数据...')
+              }
+            })
     }
 
   },
@@ -771,8 +820,10 @@ export default {
    })
   }
   },
+  created () {
+  judgeNet()
+  },
   mounted () {
-
     let  _this = this
     this.$nextTick(function () {
       getProvAndPici().then(res => {  //获取查询类型
