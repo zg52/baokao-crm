@@ -139,7 +139,6 @@ export default {
       valid ? loginHandler() : ''
       function loginHandler () {
         login(_this.loginData).then(res => {
-          console.log(res)
            if(res.data.code == 0) {
               msgTip('用户名或密码错误！','warning',false)
            } else {

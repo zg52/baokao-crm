@@ -214,13 +214,10 @@ border-radius:9px;
       }
     }
     div:nth-child(2) {
-      font-size: 16px;
       color: #333;
       padding:20px;
     }
-
     }
-
   }
   /deep/.paiwei {
     .el-dialog__title {
@@ -228,6 +225,19 @@ border-radius:9px;
     }
     .el-form-item {border:none;.el-form-item__label{line-height: 40px;}}
   }
+  /deep/.el-popper {top:46px!important;}
+  /deep/.el-select-dropdown__item {font-size: 16px!important;}
+  /deep/.el-scrollbar__thumb {opacity: 0;}
+
+
+  /deep/td {
+    border: 1px #2e80f8 solid !important;
+    text-align: center!important;
+    padding: 3px;
+    font-size: 16px!important;
+    line-height: 25px;
+    align-items: center!important;
+}
 </style>
 
 <template>
@@ -254,7 +264,7 @@ border-radius:9px;
             <el-input v-focus v-model="ruleForm.name" placeholder="请输入姓名"></el-input>
           </el-form-item>
           <el-form-item label="生源地：" prop="syd">
-            <el-select v-model="ruleForm.syd" placeholder="请选择生源地">
+            <el-select v-model="ruleForm.syd" placeholder="请选择生源地" size="small" :popper-append-to-body="false">
               <el-option
                 v-for="(syd,index) of syds"
                 :label="syd.name"
@@ -327,7 +337,25 @@ border-radius:9px;
       </div>
     </div>
     <div class="filterList" ref="filterList">
-        <div v-show="termNode.lk_term0" ref="lk_term0">
+       <div v-show="termNode.lk_term0" ref="lk_term0">
+          <div class="flexbetween item-center">
+              <div>
+            <i>
+              <img src="../../assets/image/msgbox1.png"/>
+            </i>
+            <span>所有统招院校</span>
+          </div>
+          <em>
+           <i></i>
+           <i></i>
+           <i></i>
+          </em>
+        </div>
+        <div class="ysl" v-html="termNode.lkCont_term0">
+          暂无数据
+        </div>
+       </div>
+        <div v-show="termNode.lk_term1" ref="lk_term1">
           <div class="flexbetween item-center">
               <div>
             <i>
@@ -341,12 +369,12 @@ border-radius:9px;
            <i></i>
           </em>
         </div>
-        <div class="ysl" v-html="termNode.lkCont_term0">
+        <div class="ysl" v-html="termNode.lkCont_term1">
           暂无数据
         </div>
        </div>
        <!-- 2 -->
-        <div v-show="termNode.lk_term1" ref="lk_term1">
+        <div v-show="termNode.lk_term2" ref="lk_term2">
           <div class="flexbetween item-center">
               <div>
             <i>
@@ -360,29 +388,10 @@ border-radius:9px;
            <i></i>
           </em>
         </div>
-        <div class="ysl" v-html="termNode.lkCont_term1">
+        <div class="ysl" v-html="termNode.lkCont_term2">
         </div>
        </div>
        <!-- 3 -->
-     <div v-show="termNode.lk_term2" ref="lk_term2">
-          <div class="flexbetween item-center">
-              <div>
-            <i>
-              <img src="../../assets/image/msgbox1.png"/>
-            </i>
-            <span>艺术类院校</span>
-          </div>
-          <em>
-           <i></i>
-           <i></i>
-           <i></i>
-          </em>
-        </div>
-        <div class="ysl" v-html="termNode.lkCont_term2">
-          暂无数据
-        </div>
-       </div>
-       <!-- 4 -->
      <div v-show="termNode.lk_term3" ref="lk_term3">
           <div class="flexbetween item-center">
               <div>
@@ -463,12 +472,13 @@ border-radius:9px;
     <el-button type="primary" @click="paiweiDown">确 定</el-button>
   </span>
 </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { getProvAndPici, getIndexList } from '@/api/classify'  //接口
+import { getProvAndPici, getIndexList, termDown } from '@/api/classify'  //接口
 import { msgTip } from '@/utils/msgTip' //操作提示
 import { judgeNet } from '@/utils/judgeNet'
 import Cookies from 'js-cookie'
@@ -492,8 +502,6 @@ export default {
         ks_type: '1', //默认联考
         down: 2,      //默认为2（0-json,1-表格文件，2-html文本）
         token: Cookies.get('token')
-
-
       },
       syds: [],     //生源地
       rules: {
@@ -539,16 +547,16 @@ export default {
       },
        terms: [
                {
+                  name:'所有统招院校',
+                  value:'lk_all'
+               },
+               {
                   name:'211和985院校',
                   value:'lk_29'
                },
                {
                   name:'入选双一流院校',
                   value:'lk_syl'
-               },
-               {
-                  name:'艺术类院校',
-                  value:'lk_ys'
                },
                {
                   name:'专业分比重高',
@@ -564,9 +572,9 @@ export default {
                }
              ],
              targetTerm: [ //条件参数
+                { lk_all: 1 },
                 { lk_29: 1 },
                 { lk_syl: 1 },
-                { lk_ys: 1 },
                 { lk_zyfg: 1 },
                 { lk_whfg: 1 },
                 { lk_whfpm: 1}
@@ -618,7 +626,6 @@ export default {
   methods: {
   // 读取省份id
   getProv_id (index,e) {
-      console.log(syds[index].id)
   },
     addXlsxHandler () { //点击得到文件名字
       this.switchHandler = true
@@ -697,7 +704,6 @@ export default {
       // 清空多选条件
     empty2 (checkeds) {
        this.$refs[checkeds].resetFields()
-      //  console.log(this.termNode)
        for(let i = 0; i <= 5; i++) {
          this.termNode['lk_term' + i] = false
        }
@@ -735,27 +741,20 @@ export default {
                     for (let k in _this.ruleForm) {
                       if (k == keys) {
                         delete _this.ruleForm[k]
-                        console.log(_this.ruleForm)
                       }
                     }
                   }
-                  // assignHandler()
-                  )
-                    : assignHandler()
-                    // break
+                  ) : assignHandler()
                  }
-                //  assignHandler()
-                function assignHandler () {
+                function assignHandler () { // 拉去html文本
                     getIndexList(Object.assign(_this.ruleForm,_this.targetTerm[index])).then(res => {  //得到筛选的数据
-                  res.data.data === '' ?
+
+                  res.data.data == '' ?
                   _this.termNode['lkCont_term' + index] = '暂无数据...' :
-                  _this.termNode['lkCont_term' + index] = res
-                  // _this.termNode['lkCont_term' + index] = index
+                  _this.termNode['lkCont_term' + index] = res.data
                   })
                 }
               }
-
-
           } else {
                 e.target.checked = false
                 msgTip('请先完善学生基本信息！','warning',true)
@@ -789,9 +788,15 @@ export default {
       _this.downSwitch = false
       //下载
       _this.ruleForm.down = 1
-      getIndexList(_this.ruleForm).then(res => {  //得到筛选的数据
+      let termDownParms = ''
+          for (let m in _this.ruleForm) {
+            termDownParms += m + '=' + _this.ruleForm[m] + '&'
+          }
+      termDown(termDownParms).then(res => {  //得到筛选的数据
               if(res.data.data == '') {
                 msgTip('暂无数据...')
+              } else {
+        location.href = 'https://wechat.yimingyikao.com/yk_api/list/getIndexList?' + termDownParms
               }
             })
     }
@@ -812,9 +817,7 @@ export default {
   paiweiDown () {
    this.$refs.paiwei.validate(valid => {
      if (valid) {
-
           //开始下载表格
-          console.log('okDown2')
           this.paiweiShow = false
      }
    })
