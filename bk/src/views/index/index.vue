@@ -280,11 +280,15 @@ border-radius:9px;
           <el-form-item label="专业分：" prop="zyf">
             <el-input v-model.number="ruleForm.zyf" placeholder="请输入专业分"></el-input>
           </el-form-item>
-          <el-form-item label="英语分：" prop="yy">
-            <el-input v-model.number="ruleForm.yy" placeholder="请输入英语分"></el-input>
+          <el-form-item label="文科分："
+           prop="yy"
+           >
+            <el-input v-model.number="ruleForm.yy" placeholder="请输入文科分"></el-input>
           </el-form-item>
-          <el-form-item label="语文分：" prop="yw">
-            <el-input v-model.number="ruleForm.yw" placeholder="请输入语文分"></el-input>
+          <el-form-item label="理科分："
+          prop="yw"
+          >
+            <el-input v-model.number="ruleForm.yw" placeholder="请输入理科分"></el-input>
           </el-form-item>
         </el-form>
         <div class="addTables" id="addTables">
@@ -521,14 +525,14 @@ export default {
           { required: true, message: "请输入分值" },
           { type: 'number', message: '分值必须为数字值'}
         ],
-        yy: [
-          { required: true, message: "请输入分值" },
-          { type: 'number', message: '分值必须为数字值'}
-        ],
-        yw: [
-          { required: true, message: "请输入分值" },
-          { type: 'number', message: '分值必须为数字值'}
-        ]
+        // yy: [
+        //   { required: true, message: "请输入分值" },
+        //   { type: 'number', message: '分值必须为数字值'}
+        // ],
+        // yw: [
+        //   { required: true, message: "请输入分值" },
+        //   { type: 'number', message: '分值必须为数字值'}
+        // ]
       },
       fileName: '',       //导入的文件名字
       fileValue: '',      //input文件value值

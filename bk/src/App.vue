@@ -49,7 +49,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
 #app {
   font-family: "Microsoft YaHei","Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -65,14 +65,16 @@ export default {
 @media screen and (min-device-width:1500px) and (max-device-width:1920px){
  #app {
      zoom: .83!important;
+     .appmain {
+      -moz-transform: scale(.8) translate(90px,0);
   }
 }
 
 @media screen  and (min-device-width:1204px) and (max-device-width:1500px){
  #app {
      zoom: .7;
+     .appmain {
+      -moz-transform: scale(.8) translate(90px,0);
   }
-}
-
-
+ }}}
 </style>
