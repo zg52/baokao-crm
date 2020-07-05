@@ -40,6 +40,9 @@ axios.interceptors.response.use(data => {
 
 
 
+
+
+
 // 登录
 /*
  * @export
@@ -54,6 +57,24 @@ export function login (data) {
     data
   })
 }
+
+
+/**
+ * 获取大类-类型
+ *
+ * @export
+ * @param {*} data
+ * @returns
+ */
+export function selecttuser (data) {
+  return axios({
+    url: URL + '/yk_api/list/selecttuser',
+    method: 'post',
+    data
+  })
+}
+
+
 /**
  * 获取大类-类型
  *
