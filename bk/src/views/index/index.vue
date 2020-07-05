@@ -1028,7 +1028,9 @@ export default {
         _this.filterListShow == true
           ? ((_this.ismodify = 1),
             (_this.whf_permission = true),
-            (_this.ideShow = false))
+            (_this.ideShow = false),
+            ( _this.$refs.checkeds.resetFields() )
+            )
           : (_this.ismodify = 0);
       }
       // ==========================================点击判断是否可编辑文化文===========================

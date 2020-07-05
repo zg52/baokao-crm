@@ -70,11 +70,25 @@ export default {
   }
 }
 
+ }
+@media screen and (max-device-width:1370px) {
+#app {
+     zoom: .6!important;
+     .appmain {
+  -moz-transform: scale(0.54) translate(-264px, -260px);
+  }
+  .slideBar {
+    margin-left: -27px;
+  }
+}
+}
 @media screen  and (min-device-width:1204px) and (max-device-width:1500px){
  #app {
      zoom: .7;
      .appmain {
       -moz-transform: scale(.8) translate(90px,0);
   }
- }}}
+ }}
+
+
 </style>
