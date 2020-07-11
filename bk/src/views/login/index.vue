@@ -149,6 +149,7 @@ export default {
                   _this.$router.push({
                   path:'/index'
              })
+             location.reload() //进入登录页先刷新页面
            }
         })
       }

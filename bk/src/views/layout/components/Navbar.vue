@@ -12,7 +12,7 @@
 </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState,mapMutations } from 'vuex'
 import Cookies from 'js-cookie'
 export default {
 name: 'Navbar',
@@ -23,22 +23,26 @@ data () {
 },
 computed: {
     ...mapState({
-       username: username => username.user.username
+       username: username => username.user.username,
+       loginOutParams: loginOutParams => loginOutParams.user.loginOutParams
      })
 },
 watch: {
 
 },
 methods: {
+  ...mapMutations(['loginChange']),//盗取退出登录标识
   loginOut (e) { //退出登录
+      this.loginChange()
     this.$router.push({
       path:'/'
     })
     Cookies.remove('token')
   }
+
 },
 mounted () {
-  this.username1 = Cookies.get('username1')
+  this.username1 = Cookies.get('username1');
 }
 }
 </script>

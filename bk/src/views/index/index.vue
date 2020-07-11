@@ -555,7 +555,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState,mapMutations } from "vuex";
 import {
   selecttuser,
   getProvAndPici,
@@ -695,6 +695,13 @@ export default {
       }
     };
   },
+    computed: {
+    ...mapState({
+      username: username => username.user.username,
+      loginOutParams: loginOutParams => loginOutParams.user.loginOutParams
+    })
+
+  },
   watch: {
     fileName: {
       handler(val) {},
@@ -706,6 +713,12 @@ export default {
         this.switchHandler ? this.addReadXlsx() : this.dropReadXlsx();
       }
       // deep: true
+    },
+     loginOutParams: {
+      handler (val) {
+       !val ?  (this.$refs.ruleForm.resetFields()) : true
+      },
+      deep: true
     }
     // "ruleForm.whf": {
     //   handler(val, oldval) {
@@ -715,11 +728,7 @@ export default {
     //   deep: true
     // }
   },
-  computed: {
-    ...mapState({
-      username: username => username.user.username
-    })
-  },
+
   methods: {
      //  ===============================================点击上传后得到文件名字=================
     getProv_id(index, e) {},
@@ -788,28 +797,29 @@ export default {
     dropReadXlsx() {
       this.addReadXlsx();
     },
-
+...mapMutations(['loginChange']),
     // ===============================================清空表单=====================================
     empty1(ruleForm) {
-      this.$refs[ruleForm].resetFields();
-      this.$refs.checkeds.resetFields();
+
+      this.$refs[ruleForm].resetFields()
+      this.$refs.checkeds.resetFields()
       for (let i = 0; i <= 5; i++) {
-        this.termNode["lk_term" + i] = false;
+        this.termNode["lk_term" + i] = false
       }
-      this.fileName = "";
-      this.$refs.addXlsx.value = "";
-      this.permission = false; //表单可编辑
+      this.fileName = ""
+      this.$refs.addXlsx.value = ""
+      this.permission = false //表单可编辑
       this.whf_permission = false; //表单可编辑
       this.ideShow = false; //隐藏文化分编辑按钮
-      msgTip("表单信息已清空！", "success", true);
+      msgTip("表单信息已清空！", "success", true)
     },
     // ===========================================清空多选条件==================================
     empty2(checkeds) {
-      this.$refs[checkeds].resetFields();
+      this.$refs[checkeds].resetFields()
       for (let i = 0; i <= 5; i++) {
-        this.termNode["lk_term" + i] = false;
+        this.termNode["lk_term" + i] = false
       }
-      msgTip("条件已清空！", "success", true);
+      msgTip("条件已清空！", "success", true)
     },
     //  =======================================多选条件时，验证表单信息=============================
     submitTerm(ruleForm, e, index) {

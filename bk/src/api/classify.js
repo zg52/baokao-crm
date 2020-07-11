@@ -49,7 +49,7 @@ axios.interceptors.response.use(data => {
  * @param {*} data
  * @returns
  */
-let URL = 'https://wechat.yimingyikao.com' //https://wechat.yimingyikao.com  api为dev环境
+let URL = 'api' //https://wechat.yimingyikao.com  api为dev环境
 export function login (data) {
   return axios({
     url: URL + '/yk_api/tuser/login',

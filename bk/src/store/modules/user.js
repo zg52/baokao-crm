@@ -2,7 +2,8 @@ const user = {
   state: {
     token:'ewe',
     userId:'',
-    username:''
+    username:'',
+    loginOutParams: true
   },
   mutations: {
    idChange (state,i) {
@@ -12,6 +13,9 @@ const user = {
    },
    nameChange (state,name) {
      state.username = name
+   },
+   loginChange (state) {
+    state.loginOutParams = false
    }
   },
   actions: {
