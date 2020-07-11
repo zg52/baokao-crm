@@ -742,6 +742,8 @@ export default {
           clearInterval(readXlsxTime);
         }
       }, 1000);
+
+
     },
  //  =================================================拖拽得到文件名字=========================
     dropXlsxHandler(e) {
@@ -761,7 +763,15 @@ export default {
         ".xlsx" == file_houzhui ||
         ".xls" == file_houzhui
       ) {
-        reading();
+
+        new Promise(function (resolve,reject) {
+          resolve(reading())
+        }).then((val) => {
+         setTimeout(() => {
+            this.getNameMate()
+         })
+        })
+
       } else {
         msgTip("请添加格式为excel或xlsx的表格文件！", "warning", true);
       }
@@ -792,10 +802,19 @@ export default {
             _this.fileName = _this.fileValueOld; //未找到字段切回已添加文件正确的格式
           }
         }
+
       }
+
     },
     dropReadXlsx() {
-      this.addReadXlsx();
+      let _this = this
+      new Promise(function (resolve,reject) {
+          resolve(_this.addReadXlsx())
+        }).then((val) => {
+         setTimeout(() => {
+            _this.getNameMate()
+         })
+        })
     },
 ...mapMutations(['loginChange']),
     // ===============================================清空表单=====================================
@@ -976,7 +995,32 @@ export default {
     whf_foucs_handler(e) {
       console.log(e.target);
       whf_foucs.focus();
-    }
+    },
+   getNameMate () {
+        if (this.ruleForm.name != "" && this.ruleForm.name.length > 1) {
+          selecttuser({
+            name: this.ruleForm.name,
+            token: this.ruleForm.token
+          }).then(res => {
+            let dataUser = res.data.data.user;
+            this.user = dataUser;
+            if (
+              res.data.msg == "获取用户成功" &&
+              res.data.msg != null &&
+              res.data.msg != undefined
+            ) {
+              this.ruleForm.syd = dataUser.s_syd;
+              this.ruleForm.whf = dataUser.s_whf;
+              this.ruleForm.zyf = dataUser.s_zyf;
+              msgTip("系统已自动匹配您之前填过的信息！", "success", true);
+              //  拉去匹配的信息后禁止编辑
+              this.permission = true;
+              this.ismodify = dataUser.ismodify;
+            }
+            dataUser.ismodify == 1 ? (this.whf_permission = true) : String;
+          })
+        }
+      }
   },
   created() {
     judgeNet();
@@ -989,33 +1033,9 @@ export default {
       this.$E.addEvent(
         document.getElementById("nameMate"),
         "mouseleave",
-        getNameMate
-      );
-      function getNameMate() {
-        if (_this.ruleForm.name != "" && _this.ruleForm.name.length > 1) {
-          selecttuser({
-            name: _this.ruleForm.name,
-            token: _this.ruleForm.token
-          }).then(res => {
-            let dataUser = res.data.data.user;
-            _this.user = dataUser;
-            if (
-              res.data.msg == "获取用户成功" &&
-              res.data.msg != null &&
-              res.data.msg != undefined
-            ) {
-              _this.ruleForm.syd = dataUser.s_syd;
-              _this.ruleForm.whf = dataUser.s_whf;
-              _this.ruleForm.zyf = dataUser.s_zyf;
-              msgTip("系统已自动匹配您之前填过的信息！", "success", true);
-              //  拉去匹配的信息后禁止编辑
-              _this.permission = true;
-              _this.ismodify = dataUser.ismodify;
-            }
-            dataUser.ismodify == 1 ? (_this.whf_permission = true) : String;
-          });
-        }
-      }
+        _this.getNameMate
+      )
+
       //文化分修改提示
       // _this.$E.addEvent(
       //   document.getElementById("whf_xiugai"),
