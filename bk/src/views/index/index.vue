@@ -336,6 +336,7 @@
               placeholder="请输入姓名"
               :disabled="permission"
               id="nameMate"
+
             ></el-input>
           </el-form-item>
           <el-form-item label="生源地：" prop="syd">
@@ -352,6 +353,7 @@
                 :value="syd.name"
                 :id="syd.id"
                 :key="syd.id"
+                @click.native="showSydPiCi"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -594,7 +596,8 @@ export default {
       permission: false, //禁用表单
       whf_permission: false, //专业分保单禁用
       ideShow: false, //展示聚焦按钮
-      filterListShow: false,
+      filterListShow: true
+      ,
       ismodify: null, //0是可以修改，1禁止(修改文化分)
       whfInit: "", //记录文化分初始值
       user: null,
@@ -637,30 +640,30 @@ export default {
         ]
       },
       terms: [
-        {
-          name: "所有统招院校",
-          value: "lk_all"
-        },
-        {
-          name: "211和985院校",
-          value: "lk_29"
-        },
-        {
-          name: "入选双一流院校",
-          value: "lk_syl"
-        },
-        {
-          name: "专业分比重高",
-          value: "lk_zyfg"
-        },
-        {
-          name: "文化分比重高",
-          value: "lk_whfg"
-        },
-        {
-          name: "文化排名录取",
-          value: "lk_whfpm"
-        }
+        // {
+        //   name: "所有统招院校",
+        //   value: "lk_all"
+        // },
+        // {
+        //   name: "211和985院校",
+        //   value: "lk_29"
+        // },
+        // {
+        //   name: "入选双一流院校",
+        //   value: "lk_syl"
+        // },
+        // {
+        //   name: "专业分比重高",
+        //   value: "lk_zyfg"
+        // },
+        // {
+        //   name: "文化分比重高",
+        //   value: "lk_whfg"
+        // },
+        // {
+        //   name: "文化排名录取",
+        //   value: "lk_whfpm"
+        // }
       ],
    //  ========================================================筛选条件参数=========================
       targetTerm: [
@@ -675,12 +678,12 @@ export default {
       downSwitch: false, //判断下载类型
       termNode: {
         //控制根据条件筛选返回html的容器隐藏
-        lk_term0: false,
-        lk_term1: false,
-        lk_term2: false,
-        lk_term3: false,
-        lk_term4: false,
-        lk_term5: false,
+        lk_term0: true,
+        lk_term1: true,
+        lk_term2: true,
+        lk_term3: true,
+        lk_term4: true,
+        lk_term5: true,
         // 筛选返回的html
         lkCont_term0: "",
         lkCont_term1: "",
@@ -730,6 +733,23 @@ export default {
   },
 
   methods: {
+    // 点击省份列出批次条件
+    showSydPiCi () {
+      var termList = [];
+      this.syds.map((x) => {
+        this.ruleForm.syd == JSON.parse(JSON.stringify(x.name)) ?
+        addTermList() :
+        null;
+        function addTermList () {
+          // console.log(JSON.parse(JSON.stringify(x.pici_list))['1'])
+          for(let i in JSON.parse(JSON.stringify(x.pici_list))) {
+            termList.push(JSON.parse(JSON.stringify(x.pici_list)[i]))
+          }
+        }
+      })
+      console.log(termList)
+      // alert(0)
+    },
      //  ===============================================点击上传后得到文件名字=================
     getProv_id(index, e) {},
     addXlsxHandler() {
@@ -1023,9 +1043,10 @@ export default {
       }
   },
   created() {
-    judgeNet();
+    judgeNet()
   },
   mounted() {
+
     let _this = this;
     this.$nextTick(function() {
       //=====================================根据数据库name填充库存已有表单值===============================
@@ -1087,7 +1108,7 @@ export default {
 
       getProvAndPici().then(res => {
         //获取查询类型
-        _this.syds = res.data.data;
+        _this.syds = res.data.data
       })
 
       // 阻止拖拽相关默认事件
