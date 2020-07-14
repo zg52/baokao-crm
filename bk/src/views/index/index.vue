@@ -177,18 +177,22 @@
   top: 2px;
 }
 .filterList {
-  display: flex;
-  justify-content: space-around;
-  width: 1496px;
+  // display: flex;
+  // justify-content: space-around;
+  // width: 1496px;
   margin-top: 40px;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
   & > div {
     box-shadow: 0px 8px 31px 0px rgba(20, 49, 127, 0.08),
       3px 3px 12px 0px rgba(228, 228, 228, 0.5);
     border-radius: 9px;
     margin-bottom: 40px;
+   .ysl {
+      justify-content: center;
+    display: flex;
+   }
 
-    width: 730px;
+    // width: 730px;
     div:first-child {
       height: 58px;
       background: rgba(250, 250, 250, 1);
@@ -255,6 +259,7 @@
   font-size: 16px !important;
   line-height: 25px;
   align-items: center !important;
+  white-space: nowrap;
 }
 .nptMsg {
   .el-radio {
@@ -434,7 +439,7 @@
       </div>
     </div>
     <div class="filterList" ref="filterList" v-show="filterListShow">
-      <div v-show="termNode.lk_term0" ref="lk_term0">
+      <div v-show="termNode.lk_term0" ref="lk_term0" data-num="0">
         <div class="flexbetween item-center">
           <div>
             <i>
@@ -450,13 +455,13 @@
         </div>
         <div class="ysl" v-html="termNode.lkCont_term0">暂无数据</div>
       </div>
-      <div v-show="termNode.lk_term1" ref="lk_term1">
+      <div v-show="termNode.lk_term1" ref="lk_term1" data-num="1">
         <div class="flexbetween item-center">
           <div>
             <i>
               <img src="../../assets/image/msgbox1.png" />
             </i>
-            <span>211和985院校</span>
+            <span></span>
           </div>
           <em>
             <i></i>
@@ -467,13 +472,13 @@
         <div class="ysl" v-html="termNode.lkCont_term1">暂无数据</div>
       </div>
       <!-- 2 -->
-      <div v-show="termNode.lk_term2" ref="lk_term2">
+      <div v-show="termNode.lk_term2" ref="lk_term2" data-num="2">
         <div class="flexbetween item-center">
           <div>
             <i>
               <img src="../../assets/image/msgbox1.png" />
             </i>
-            <span>入选双一流院校</span>
+            <span></span>
           </div>
           <em>
             <i></i>
@@ -484,13 +489,13 @@
         <div class="ysl" v-html="termNode.lkCont_term2"></div>
       </div>
       <!-- 3 -->
-      <div v-show="termNode.lk_term3" ref="lk_term3">
+      <div v-show="termNode.lk_term3" ref="lk_term3" data-num="3">
         <div class="flexbetween item-center">
           <div>
             <i>
               <img src="../../assets/image/msgbox1.png" />
             </i>
-            <span>专业分比重高</span>
+            <span></span>
           </div>
           <em>
             <i></i>
@@ -500,13 +505,13 @@
         </div>
         <div class="ysl" v-html="termNode.lkCont_term3">暂无数据</div>
       </div>
-      <div v-show="termNode.lk_term4" ref="lk_term4">
+      <div v-show="termNode.lk_term4" ref="lk_term4" data-num="4">
         <div class="flexbetween item-center">
           <div>
             <i>
               <img src="../../assets/image/msgbox1.png" />
             </i>
-            <span>文化分比重高</span>
+            <span></span>
           </div>
           <em>
             <i></i>
@@ -516,13 +521,13 @@
         </div>
         <div class="ysl" v-html="termNode.lkCont_term4">暂无数据</div>
       </div>
-      <div v-show="termNode.lk_term5" ref="lk_term5">
+      <div v-show="termNode.lk_term5" ref="lk_term5" data-num="5">
         <div class="flexbetween item-center">
           <div>
             <i>
               <img src="../../assets/image/msgbox1.png" />
             </i>
-            <span>文化排名录取</span>
+            <span></span>
           </div>
           <em>
             <i></i>
@@ -531,6 +536,23 @@
           </em>
         </div>
         <div class="ysl" v-html="termNode.lkCont_term5">暂无数据</div>
+      </div>
+
+       <div v-show="termNode.lk_term6" ref="lk_term6" data-num="6">
+        <div class="flexbetween item-center">
+          <div>
+            <i>
+              <img src="../../assets/image/msgbox1.png" />
+            </i>
+            <span></span>
+          </div>
+          <em>
+            <i></i>
+            <i></i>
+            <i></i>
+          </em>
+        </div>
+        <div class="ysl" v-html="termNode.lkCont_term6">暂无数据</div>
       </div>
     </div>
 
@@ -585,6 +607,7 @@ export default {
         ks_type: "1", //默认联考
         down: 2, //默认为2（0-json,1-表格文件，2-html文本）
         wenli: "1", //默认文科或不分文理
+        pici:'',//批次
         token: Cookies.get("token")
       },
       fileName: "", //导入的文件名字
@@ -640,12 +663,12 @@ export default {
         ]
       },
       terms: [
+        {
+          name: "所有统招院校",
+          value: "lk_all"
+        },
         // {
-        //   name: "所有统招院校",
-        //   value: "lk_all"
-        // },
-        // {
-        //   name: "211和985院校",
+        //  name: "艺术类本科批A段",
         //   value: "lk_29"
         // },
         // {
@@ -668,29 +691,31 @@ export default {
    //  ========================================================筛选条件参数=========================
       targetTerm: [
         //条件参数
-        { lk_all: 1 },
-        { lk_29: 1 },
-        { lk_syl: 1 },
-        { lk_zyfg: 1 },
-        { lk_whfg: 1 },
-        { lk_whfpm: 1 }
+        'lk_all' //所有统招院校参数
+        // { lk_29: 1 },
+        // { lk_syl: 1 },
+        // { lk_zyfg: 1 },
+        // { lk_whfg: 1 },
+        // { lk_whfpm: 1 }
       ],
       downSwitch: false, //判断下载类型
       termNode: {
         //控制根据条件筛选返回html的容器隐藏
-        lk_term0: true,
-        lk_term1: true,
-        lk_term2: true,
-        lk_term3: true,
-        lk_term4: true,
-        lk_term5: true,
+        lk_term0: false,
+        lk_term1: false,
+        lk_term2: false,
+        lk_term3: false,
+        lk_term4: false,
+        lk_term5: false,
+        lk_term6: false,
         // 筛选返回的html
         lkCont_term0: "",
         lkCont_term1: "",
         lkCont_term2: "",
         lkCont_term3: "",
         lkCont_term4: "",
-        lkCont_term5: ""
+        lkCont_term5: "",
+        lkCont_term6: ""
       },
       paiweiShow: false, //排位弹出层
       paiwei: {
@@ -735,20 +760,39 @@ export default {
   methods: {
     // 点击省份列出批次条件
     showSydPiCi () {
-      var termList = [];
+      // 清空条件选中
+      this.$refs.checkeds.resetFields()
+
+       this.terms = [
+        {
+          name: "所有统招院校",
+          value: "lk_all"
+        }
+       ]
+      var termList = []
+      let termResult = []
       this.syds.map((x) => {
         this.ruleForm.syd == JSON.parse(JSON.stringify(x.name)) ?
         addTermList() :
         null;
         function addTermList () {
-          // console.log(JSON.parse(JSON.stringify(x.pici_list))['1'])
-          for(let i in JSON.parse(JSON.stringify(x.pici_list))) {
-            termList.push(JSON.parse(JSON.stringify(x.pici_list)[i]))
+          let arr1 = JSON.parse(JSON.stringify(x.pici_list))
+          for(let i in arr1) {
+            termList.push(arr1[i])
           }
+
         }
       })
-      console.log(termList)
-      // alert(0)
+    // 转出最终条件列表
+   termList.map((x) => {
+     termResult.push({name:x})
+   });
+  //渲染条件列表
+  termResult.forEach((item) => {
+    this.terms.push(item)
+  })
+
+  console.log(termResult)
     },
      //  ===============================================点击上传后得到文件名字=================
     getProv_id(index, e) {},
@@ -848,7 +892,7 @@ export default {
       this.fileName = ""
       this.$refs.addXlsx.value = ""
       this.permission = false //表单可编辑
-      this.whf_permission = false; //表单可编辑
+      this.whf_permission = false //表单可编辑
       this.ideShow = false; //隐藏文化分编辑按钮
       msgTip("表单信息已清空！", "success", true)
     },
@@ -863,16 +907,16 @@ export default {
     //  =======================================多选条件时，验证表单信息=============================
     submitTerm(ruleForm, e, index) {
       let _this = this;
-      if (index == 0 || 1 || 2 || 3 || 4 || 5) {
-        _this.whfInit = _this.ruleForm.whf; //初始文化分,用于新旧值比较
+      if (index == 0 || 1 || 2 || 3 || 4 || 5 || 6) {
+        _this.whfInit = _this.ruleForm.whf //初始文化分,用于新旧值比较
         this.$refs[ruleForm].validate(valid => {
-          if (valid) {
+          if (!valid) {
             // e.target.checked = true
             this.ruleForm.down = 2; //刷选条件，需传入返回html的参数
-            this.ruleForm.type_id = this.$route.query.id; //类型参数
+            this.ruleForm.type_id = this.$route.query.id //类型参数
             this.syds.map(x => {
               this.ruleForm.syd == x.name
-                ? (this.ruleForm.prov_id = x.id)
+                ? (this.ruleForm.prov_id = x.id) //获取省份id
                 : String;
             });
 
@@ -884,28 +928,34 @@ export default {
                       _this.$refs["lk_term" + index],
                       _this.$refs.filterList.childNodes[2]
                     ),
-                    getTermHtml(index))
+                    getTermHtml(index),
+                    console.log(_this.$refs["lk_term" + index].getElementsByTagName('span')[0].innerHTML = _this.terms[index].name)
+                    )
                   : (_this.termNode["lk_term" + index] = false);
                 break;
             }
-            function getTermHtml(index) {
-              for (let i = 0; i < _this.targetTerm.length; i++) {
-                let keys = Object.keys(_this.targetTerm[i])[0];
-                _this.ruleForm.hasOwnProperty(keys)
-                  ? new (function() {
-                      for (let k in _this.ruleForm) {
-                        if (k == keys) {
-                          delete _this.ruleForm[k];
-                        }
-                      }
-                    })()
-                  : assignHandler();
-                return;
-              }
-              function assignHandler() {
+            function getTermHtml(index) { //统招和pic只能任传一个
+              index == 0 ?
+              ( _this.ruleForm.lk_all = 1, delete _this.ruleForm.pici) :
+              (_this.ruleForm.pici = _this.terms[index].name, delete _this.ruleForm.lk_all)
+              assignHandler()
+              // for (let i = 0; i < _this.targetTerm.length; i++) {
+              //   let keys = Object.keys(_this.targetTerm[i])[0];
+              //   _this.ruleForm.hasOwnProperty(keys)
+              //     ? new (function() {
+              //         for (let k in _this.ruleForm) {
+              //           if (k == keys) {
+              //             delete _this.ruleForm[k];
+              //           }
+              //         }
+              //       })()
+              //     : assignHandler();
+              //   return;
+              // }
 // ===============================================拉去html文本==========================================
+              function assignHandler() {
                 getIndexList(
-                  Object.assign(_this.ruleForm, _this.targetTerm[index])
+                  Object.assign(_this.ruleForm)
                 ).then(res => {
                   //得到筛选的数据
                   if (res.data.msg == "名额已用完" && res.data.data == "") {
