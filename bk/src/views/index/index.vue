@@ -223,6 +223,13 @@
       div + em {
         margin-right: -4px;
         width: 74px;
+        font-size: 30px;
+        color: #999;
+        margin-top: 5px;cursor: pointer;
+        font-weight: bold;
+        &:hover {
+          color: #82b3fb;
+        }
       }
     }
     div:nth-child(2) {
@@ -447,10 +454,7 @@
             </i>
             <span>所有统招院校</span>
           </div>
-          <em>
-            <i></i>
-            <i></i>
-            <i></i>
+          <em class="el-icon-download" title="下载表格" @click="downTerm0">
           </em>
         </div>
         <div class="ysl" v-html="termNode.lkCont_term0">暂无数据</div>
@@ -463,10 +467,7 @@
             </i>
             <span></span>
           </div>
-          <em>
-            <i></i>
-            <i></i>
-            <i></i>
+          <em class="el-icon-download" @click="downTerm1">
           </em>
         </div>
         <div class="ysl" v-html="termNode.lkCont_term1">暂无数据</div>
@@ -480,10 +481,7 @@
             </i>
             <span></span>
           </div>
-          <em>
-            <i></i>
-            <i></i>
-            <i></i>
+          <em class="el-icon-download" @click="downTerm2">
           </em>
         </div>
         <div class="ysl" v-html="termNode.lkCont_term2"></div>
@@ -497,10 +495,7 @@
             </i>
             <span></span>
           </div>
-          <em>
-            <i></i>
-            <i></i>
-            <i></i>
+          <em class="el-icon-download" @click="downTerm3">
           </em>
         </div>
         <div class="ysl" v-html="termNode.lkCont_term3">暂无数据</div>
@@ -513,10 +508,7 @@
             </i>
             <span></span>
           </div>
-          <em>
-            <i></i>
-            <i></i>
-            <i></i>
+          <em class="el-icon-download" @click="downTerm4">
           </em>
         </div>
         <div class="ysl" v-html="termNode.lkCont_term4">暂无数据</div>
@@ -529,10 +521,7 @@
             </i>
             <span></span>
           </div>
-          <em>
-            <i></i>
-            <i></i>
-            <i></i>
+          <em class="el-icon-download" @click="downTerm5">
           </em>
         </div>
         <div class="ysl" v-html="termNode.lkCont_term5">暂无数据</div>
@@ -546,10 +535,7 @@
             </i>
             <span></span>
           </div>
-          <em>
-            <i></i>
-            <i></i>
-            <i></i>
+          <em class="el-icon-download" @click="downTerm6">
           </em>
         </div>
         <div class="ysl" v-html="termNode.lkCont_term6">暂无数据</div>
@@ -565,7 +551,7 @@
           :rules="[
       { required: true, message: '排位/名次不能为空'},
       { type: 'number', message: '排位/名次必须为数字值'}
-    ]"
+       ]"
         >
           <el-input type="age" v-model.number="paiwei.pw" autocomplete="off"></el-input>
         </el-form-item>
@@ -617,10 +603,9 @@ export default {
       switchHandler: true,
       syds: [], //生源地
       permission: false, //禁用表单
-      whf_permission: false, //专业分保单禁用
+      whf_permission: false, //文化分表单禁用
       ideShow: false, //展示聚焦按钮
-      filterListShow: true
-      ,
+      filterListShow: false,
       ismodify: null, //0是可以修改，1禁止(修改文化分)
       whfInit: "", //记录文化分初始值
       user: null,
@@ -758,6 +743,7 @@ export default {
   },
 
   methods: {
+...mapMutations(['loginChange']),
     // 点击省份列出批次条件
     showSydPiCi () {
       // 清空条件选中
@@ -880,7 +866,6 @@ export default {
          })
         })
     },
-...mapMutations(['loginChange']),
     // ===============================================清空表单=====================================
     empty1(ruleForm) {
 
@@ -910,7 +895,7 @@ export default {
       if (index == 0 || 1 || 2 || 3 || 4 || 5 || 6) {
         _this.whfInit = _this.ruleForm.whf //初始文化分,用于新旧值比较
         this.$refs[ruleForm].validate(valid => {
-          if (!valid) {
+          if (valid) {
             // e.target.checked = true
             this.ruleForm.down = 2; //刷选条件，需传入返回html的参数
             this.ruleForm.type_id = this.$route.query.id //类型参数
@@ -937,7 +922,7 @@ export default {
             function getTermHtml(index) { //统招和pic只能任传一个
               index == 0 ?
               ( _this.ruleForm.lk_all = 1, delete _this.ruleForm.pici) :
-              (_this.ruleForm.pici = _this.terms[index].name, delete _this.ruleForm.lk_all)
+              (_this.ruleForm.pici = index, delete _this.ruleForm.lk_all)
               assignHandler()
               // for (let i = 0; i < _this.targetTerm.length; i++) {
               //   let keys = Object.keys(_this.targetTerm[i])[0];
@@ -1000,7 +985,31 @@ export default {
         });
       }
     },
-// =====================================下载表格===============================================
+  // =====================================下载渲染到页面的表格===============================================
+  downTerm0 () {
+  this.down2()
+  },
+  downTerm1 () {
+  this.down2()
+  },
+  downTerm2 () {
+  this.down2()
+  },
+  downTerm3 () {
+  this.down2()
+  },
+  downTerm4 () {
+  this.down2()
+  },
+  downTerm5 () {
+  this.down2()
+  },
+  downTerm6 () {
+  this.down2()
+  },
+
+
+// =====================================按条件下载表格===============================================
     downStatus() {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
@@ -1127,12 +1136,13 @@ export default {
         _this.ruleForm.whf != _this.whfInit &&
         _this.ismodify == 0 &&
         _this.filterListShow == true
-          ? ((_this.ismodify = 1),
+          ? (
+            (_this.ismodify = 1),
             (_this.whf_permission = true),
             (_this.ideShow = false),
             ( _this.$refs.checkeds.resetFields() )
             )
-          : (_this.ismodify = 0);
+          : (_this.ismodify = 0)
       }
       // ==========================================点击判断是否可编辑文化文===========================
       _this.$E.addEvent(
@@ -1155,6 +1165,23 @@ export default {
           )
         }
       }
+// ==========================================修改文化分时清楚选中条件===========================
+  _this.$E.addEvent(
+        document.getElementById("whf_xiugai"),
+        "keyup",
+        whf_keyu_handler1
+      )
+      function whf_keyu_handler1 () {
+          _this.$refs.checkeds.validate(valid => {
+                if (valid) {
+                  _this.$refs.checkeds.resetFields()
+                }
+                })
+      }
+
+
+
+
 
       getProvAndPici().then(res => {
         //获取查询类型
