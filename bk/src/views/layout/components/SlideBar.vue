@@ -1,6 +1,7 @@
 <template>
-  <div class="relative">
-  <div class="slideBar">
+  <div class="relative parSldie" id="parSldie">
+  <div class="slideBar" id="slideBar">
+  <i class="el-icon-s-fold" @click="hideSlideBar($event)" title="收起"></i>
  <a href="/index" class="logo"><img src="../../../assets/image/logo.png" alt=""></a>
     <div class="memu">
    <div class="filter_xls">
@@ -25,6 +26,7 @@ export default {
   name: 'SlideBar',
   data () {
     return {
+      slideBarHideTip:true,
       typeIds: [],
       activeIndex: 0
     }
@@ -41,6 +43,27 @@ export default {
     }
   },
   methods: {
+    hideSlideBar (e) {
+
+        let parSldie = document.getElementById('parSldie')
+        let slideBar = document.getElementById('slideBar')
+        this.slideBarHideTip ?
+            (
+            slideBar.style.left = "-360px",
+            parSldie.style.marginRight = "-230px",
+            e.target.style="right: -165px; top: 27px",
+            this.slideBarHideTip = false,
+            e.target.setAttribute('title','展开')
+            ) :
+              (
+            slideBar.style.left = "0",
+            parSldie.style.marginRight = "45px",
+            e.target.style="top:auto;right:0",
+            this.slideBarHideTip = true,
+             e.target.setAttribute('title','收起')
+            )
+
+             },
     typeIdHandler (index) {
       this.activeIndex = index
       this.$router.push({
@@ -72,10 +95,13 @@ export default {
 </script>
 
 <style scoped lang="less">
+.el-icon-s-fold {color: #999;font-size: 35px;    position: absolute;cursor: pointer;color: rgba(2, 101, 247, 0.82);
+    right: 0;}
 .logo {
   margin:54px 0 0 31px;
   display: block;
 }
+.parSldie,.slideBar {transition: all .4s;}
 .slideBar {
 position: fixed;
 top:0;

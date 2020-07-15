@@ -228,7 +228,7 @@
         margin-top: 5px;cursor: pointer;
         font-weight: bold;
         &:hover {
-          color: #82b3fb;
+          color: #2e80f8;
         }
       }
     }
@@ -266,7 +266,8 @@
   font-size: 16px !important;
   line-height: 25px;
   align-items: center !important;
-  white-space: nowrap;
+  // white-space: nowrap;
+letter-spacing: 1px;
 }
 .nptMsg {
   .el-radio {
@@ -432,8 +433,7 @@
           </el-form-item>
         </el-form>
 
-        <div class="addTables" id="addTables">
-          <div>请选择选择一个或多个筛选条件</div>
+        <div class="addTables" id="addTables" :style='{position: "absolute",top:" 593px"}'> <div>请选择选择一个或多个筛选条件</div>
         </div>
       </div>
       <div>
@@ -723,7 +723,7 @@ export default {
     fileValue: {
       // ===================================监听点击和拖拽添加表格============================
       handler(val) {
-        this.switchHandler ? this.addReadXlsx() : this.dropReadXlsx();
+        this.switchHandler ? this.addReadXlsx() : this.dropReadXlsx()
       }
       // deep: true
     },
@@ -787,19 +787,19 @@ export default {
       let _this = this;
       let readXlsxTime = setInterval(function() {
         if (_this.$refs.addXlsx.value != undefined) {
-          _this.fileValue = _this.$refs.addXlsx.value;
+          _this.fileValue = _this.$refs.addXlsx.value
         } else {
-          clearInterval(readXlsxTime);
+          clearInterval(readXlsxTime)
         }
-      }, 1000);
+      }, 1000)
 
 
     },
  //  =================================================拖拽得到文件名字=========================
     dropXlsxHandler(e) {
-      this.switchHandler = false;
-      this.fileValue = e.dataTransfer.files[0].name;
-      this.dropEvent = e;
+      this.switchHandler = false
+      this.fileValue = e.dataTransfer.files[0].name
+      this.dropEvent = e
     },
     //==================================================读取表格数据到表单=======================
     addReadXlsx() {
@@ -823,25 +823,25 @@ export default {
         })
 
       } else {
-        msgTip("请添加格式为excel或xlsx的表格文件！", "warning", true);
+        msgTip("请添加格式为excel或xlsx的表格文件！", "warning", true)
       }
       // =====================================获取表格文件内容并填入入表单==============================
       function reading() {
         let reader = new FileReader();
         let fileMsg = _this.switchHandler
           ? _this.$refs.addXlsx.files[0]
-          : _this.dropEvent.dataTransfer.files[0];
-        reader.readAsBinaryString(fileMsg); //转码为可读的
+          : _this.dropEvent.dataTransfer.files[0]
+        reader.readAsBinaryString(fileMsg) //转码为可读的
         reader.onload = function() {
-          let workbook = XLSX.read(reader.result, { type: "binary" });
-          let sheet0 = workbook.Sheets[workbook.SheetNames[0]]; //sheet0代表excel表格中的第一页
+          let workbook = XLSX.read(reader.result, { type: "binary" })
+          let sheet0 = workbook.Sheets[workbook.SheetNames[0]] //sheet0代表excel表格中的第一页
           let str = XLSX.utils.sheet_to_json(sheet0); //利用接口实现转换。p4321ewqy
           _this.fileName = fileMsg.name;
           if (str[0].姓名 && str[0].专业分 && str[0].文化分 && str[0].生源地) {
-            _this.ruleForm.name = str[0].姓名;
-            _this.ruleForm.zyf = str[0].专业分;
-            _this.ruleForm.whf = str[0].文化分;
-            _this.ruleForm.syd = str[0].生源地;
+            _this.ruleForm.name = str[0].姓名
+            _this.ruleForm.zyf = str[0].专业分
+            _this.ruleForm.whf = str[0].文化分
+            _this.ruleForm.syd = str[0].生源地
             _this.$message({
               message: "表格信息已添加到表单！",
               type: "success"
@@ -849,7 +849,7 @@ export default {
             _this.fileValueOld = fileMsg.name;
           } else {
             msgTip("请检查表格信息是否完整！", "warning", true);
-            _this.fileName = _this.fileValueOld; //未找到字段切回已添加文件正确的格式
+            _this.fileName = _this.fileValueOld //未找到字段切回已添加文件正确的格式
           }
         }
 
@@ -956,11 +956,11 @@ export default {
                     res.data.data == ""
                   ) {
                     _this.termNode["lkCont_term" + index] = "暂无数据...";
-                    msgTip("暂无数据...");
+                    msgTip("暂无数据...")
                     if (_this.ismodify == 0 && _this.user != null) {
-                      _this.whf_permission = true;
+                      _this.whf_permission = true
                     } else if (_this.ismodify == 1) {
-                      _this.whf_permission = false;
+                      _this.whf_permission = false
                     }
                   } else {
                     _this.filterListShow = true;
@@ -987,24 +987,38 @@ export default {
     },
   // =====================================下载渲染到页面的表格===============================================
   downTerm0 () {
+    this.ruleForm.lk_all = 1
+    delete this.ruleForm.pici
   this.down2()
   },
   downTerm1 () {
+    delete this.ruleForm.lk_all
+    this.ruleForm.pici = 1
   this.down2()
   },
   downTerm2 () {
+    delete this.ruleForm.lk_all
+    this.ruleForm.pici = 2
   this.down2()
   },
   downTerm3 () {
+    delete this.ruleForm.lk_all
+    this.ruleForm.pici = 3
   this.down2()
   },
   downTerm4 () {
+    delete this.ruleForm.lk_all
+    this.ruleForm.pici = 4
   this.down2()
   },
   downTerm5 () {
+    delete this.ruleForm.lk_all
+    this.ruleForm.pici = 5
   this.down2()
   },
   downTerm6 () {
+    delete this.ruleForm.lk_all
+    this.ruleForm.pici = 6
   this.down2()
   },
 
@@ -1017,31 +1031,33 @@ export default {
             if (valid) {
               this.downSwitch = true;
             } else {
-              msgTip("请至少选择一个筛选条件！", "warning", true);
+              msgTip("请至少选择一个筛选条件！", "warning", true)
             }
-          });
+          })
         } else {
-          msgTip("请先完善学生基本信息！", "warning", true);
+          msgTip("请先完善学生基本信息！", "warning", true)
         }
       });
     },
     // ======================================结果-按条件返回表格====================================
     down2() {
-      let _this = this;
-      this.downStatus();
-      this.downSwitch == true ? down2Handler() : "";
+      let _this = this
+      this.downStatus()
+      this.downSwitch == true ? down2Handler() : ""
       function down2Handler() {
         _this.downSwitch = false;
         //下载
-        _this.ruleForm.down = 1;
-        let termDownParms = "";
+        _this.ruleForm.down = 1
+        let termDownParms = ""
         for (let m in _this.ruleForm) {
-          termDownParms += m + "=" + _this.ruleForm[m] + "&";
+          termDownParms += m + "=" + _this.ruleForm[m] + "&"
         }
         termDown(termDownParms).then(res => {
           //得到筛选的数据
-          if (res.data.data == "") {
-            msgTip("暂无数据...");
+         if(res.data.msg == "名额已用完"){
+            msgTip("查询名额已用完，暂不能下载，请联系管理员", "warning", true)
+          } else if(res.data.data == "") {
+            msgTip("暂无数据...")
           } else {
             location.href =
               "https://wechat.yimingyikao.com/yk_api/list/getIndexList?" +
@@ -1052,21 +1068,21 @@ export default {
     },
     // =============================================结果-按位次返回表格====================================
     down1() {
-      let _this = this;
-      this.downStatus();
-      this.downSwitch == true ? down2Handler() : "";
+      let _this = this
+      this.downStatus()
+      this.downSwitch == true ? down2Handler() : ""
       function down2Handler() {
-        _this.downSwitch = false;
+        _this.downSwitch = false
 
-        _this.paiweiShow = true;
-        _this.paiweiDown(); //开始下载表格
+        _this.paiweiShow = true
+        _this.paiweiDown() //开始下载表格
       }
     },
 //=======================================按排位开始下载表格==========================================
     paiweiDown() {
       this.$refs.paiwei.validate(valid => {
         if (valid) {
-          this.paiweiShow = false;
+          this.paiweiShow = false
         }
       });
     },
@@ -1081,22 +1097,22 @@ export default {
             name: this.ruleForm.name,
             token: this.ruleForm.token
           }).then(res => {
-            let dataUser = res.data.data.user;
-            this.user = dataUser;
+            let dataUser = res.data.data.user
+            this.user = dataUser
             if (
               res.data.msg == "获取用户成功" &&
               res.data.msg != null &&
               res.data.msg != undefined
             ) {
-              this.ruleForm.syd = dataUser.s_syd;
-              this.ruleForm.whf = dataUser.s_whf;
-              this.ruleForm.zyf = dataUser.s_zyf;
-              msgTip("系统已自动匹配您之前填过的信息！", "success", true);
+              this.ruleForm.syd = dataUser.s_syd
+              this.ruleForm.whf = dataUser.s_whf
+              this.ruleForm.zyf = dataUser.s_zyf
+              msgTip("系统已自动匹配您之前填过的信息！", "success", true)
               //  拉去匹配的信息后禁止编辑
               this.permission = true;
               this.ismodify = dataUser.ismodify;
             }
-            dataUser.ismodify == 1 ? (this.whf_permission = true) : String;
+            dataUser.ismodify == 1 ? (this.whf_permission = true) : String
           })
         }
       }
@@ -1178,11 +1194,6 @@ export default {
                 }
                 })
       }
-
-
-
-
-
       getProvAndPici().then(res => {
         //获取查询类型
         _this.syds = res.data.data
@@ -1194,11 +1205,11 @@ export default {
         drags("dragenter"); //当被鼠标拖动的对象进入其容器范围内时触发
         function drags(handler) {
           _this.$E.addEvent(_this.$refs.addXlsx, handler, function(e) {
-            _this.$E.stopEvent(e);
-          });
+            _this.$E.stopEvent(e)
+          })
         }
       }
     })
   }
-};
+}
 </script>
